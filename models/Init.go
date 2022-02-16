@@ -1,4 +1,4 @@
-package initial
+package models
 
 import (
 	"gorm.io/driver/mysql"
@@ -25,7 +25,15 @@ func InitMySQL() {
 	}
 
 	//绑定结构体
-	if err = DB.AutoMigrate(); err != nil {
+	if err = DB.AutoMigrate(
+		Post{},
+		Avatar{},
+		ClubInfo{},
+		User{},
+		Picture{},
+		Collection{},
+		Subscription{},
+	); err != nil {
 		log.Panicln(err)
 	}
 

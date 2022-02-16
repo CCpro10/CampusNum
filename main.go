@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"log"
-	"main/models/initial"
+	"main/models"
 	"main/routers"
 )
 
@@ -11,7 +11,7 @@ func Setup() {
 	log.SetPrefix("TRACE: ")
 	log.SetFlags(log.Ldate | log.Lmicroseconds | log.Llongfile)
 	//连接数据库
-	initial.InitMySQL()
+	models.InitMySQL()
 }
 
 func main() {
