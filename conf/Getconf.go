@@ -35,6 +35,7 @@ type Conf struct {
 		FullAccessRoleArn string `yaml:"fullaccessrolearn"`
 		RegionId          string `yaml:"regionid"`
 		BucketName        string `yaml:"bucketname"`
+		DefaultAvatarUrl  string `yaml:"defaultavatarurl"`
 	}
 }
 
