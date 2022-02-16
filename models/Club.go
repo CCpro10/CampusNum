@@ -1,7 +1,8 @@
 package models
 
 import (
-	"main/models/initial"
+	"log"
+	"main/conf"
 	"time"
 )
 
@@ -18,15 +19,36 @@ type ClubInfo struct {
 
 }
 
-//注册时创建社团账号
-func CreateClubInfo(data map[string]interface{}) bool {
+//存在则返回true
+func ExistClub(field string, value string) bool {
+	var c ClubInfo
+	e := DB.Where(field+" = ?", value).Find(&c).Error
+	if e != nil {
+		log.Println(e)
+	}
+	log.Println(c)
+	if c.ID != 0 {
+		return true
+	}
+	return false
+}
 
+//创建社团信息和默认头像
+func CreateClubInfo(clubInfo *ClubInfo) bool {
 	//创建时的具体类型一定要明确
-	initial.DB.Create(&ClubInfo{
-		ClubId:   data["club_id"].(int64),
-		ClubName: data["club_name"].(string),
-		Password: data["password"].(string),
-	})
-
+	clubInfo.AvatarAddr = conf.Config.Oss.DefaultAvatarUrl
+	e := DB.Create(clubInfo).Error
+	if e != nil {
+		return false
+	}
+	//创建默认头像
+	var avatar Avatar
+	avatar.ClubId = clubInfo.ID
+	avatar.PictureName = "avatar/default.jfif"
+	avatar.PictureAddr = conf.Config.Oss.DefaultAvatarUrl
+	e = DB.Create(&avatar).Error
+	if e != nil {
+		return false
+	}
 	return true
 }
