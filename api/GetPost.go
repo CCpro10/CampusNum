@@ -29,8 +29,7 @@ type ResPosts struct {
 }
 
 // @Summary 获取单条通知/动态(详情)
-// @Accept application/json
-// @Produce application/json
+// @Produce json
 // @Param post_id query uint true "帖子的id"
 // @Success 200 {object} ResPost
 // @Router /user/post [get]
@@ -41,13 +40,12 @@ func GetPost(c *gin.Context) {
 //传入的参数列表
 type postParamList struct {
 	IsNotice bool  `json:"is_notice"form:"is_notice"`     //"要查询的是否为通知,是则为true,否则为false"
-	Page     int64 `json:"page" form:"page" example:"1"`  // 页码
+	Page     int64 `json:"page" form:"page" example:"1"`  // 页码,最小为1
 	Size     int64 `json:"size" form:"size" example:"10"` // 每页数据量
 }
 
-// @Summary 获取多条通知/动态
-// @Accept application/json
-// @Produce application/json
+// @Summary 获取最新的多条通知/动态
+// @Produce json
 // @Param object query postParamList true "参数列表"
 // @Success 200 {object} ResPosts "data内有多条post"
 // @Router /user/posts [get]

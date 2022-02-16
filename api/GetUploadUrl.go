@@ -20,8 +20,7 @@ type UrlParamList struct {
 
 // @Summary 获取上传图片或头像的签名
 // @Description 获取上传图片的url及回调字符串,图片Id
-// @Accept application/json
-// @Produce application/json
+// @Produce json
 // @Param Authorization header string false "Bearer 用户令牌 例:Bearer fbhraewifvg43uwerfaewobf"
 // @Param object query UrlParamList true "传入参数"
 // @Success 200 {object} ResUrl
