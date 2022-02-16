@@ -93,8 +93,10 @@ paths:
   /register:
     post:
       parameters:
-      - description: 社团登录账号
+      - description: 社团登录账号7-12位
         in: formData
+        maximum: 999999999999
+        minimum: 99999
         name: club_id
         required: true
         type: integer
@@ -109,8 +111,10 @@ paths:
         name: invitation_code
         required: true
         type: integer
-      - description: 密码
+      - description: 密码6-32位
         in: formData
+        maxLength: 32
+        minLength: 6
         name: password
         required: true
         type: string
@@ -126,7 +130,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/api.ResRegister'
-      summary: 注册社团账号
+      summary: 注册社团账号3
   /user/post:
     get:
       parameters:

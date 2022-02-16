@@ -65,11 +65,13 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "注册社团账号",
+                "summary": "注册社团账号3",
                 "parameters": [
                     {
+                        "maximum": 999999999999,
+                        "minimum": 99999,
                         "type": "integer",
-                        "description": "社团登录账号",
+                        "description": "社团登录账号7-12位",
                         "name": "club_id",
                         "in": "formData",
                         "required": true
@@ -90,8 +92,10 @@ var doc = `{
                         "required": true
                     },
                     {
+                        "maxLength": 32,
+                        "minLength": 6,
                         "type": "string",
-                        "description": "密码",
+                        "description": "密码6-32位",
                         "name": "password",
                         "in": "formData",
                         "required": true
