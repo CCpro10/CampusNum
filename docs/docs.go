@@ -41,13 +41,15 @@ var doc = `{
                         "type": "string",
                         "description": "要发送的图片名",
                         "name": "picture_name",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "string",
                         "description": "\"post_picture\"或\"avatar\"",
                         "name": "type",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -60,12 +62,46 @@ var doc = `{
                 }
             }
         },
+        "/login": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "登录社团账号",
+                "parameters": [
+                    {
+                        "minLength": 2,
+                        "type": "string",
+                        "description": "社团名或社团账号,至少2位",
+                        "name": "club_name_or_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "minLength": 6,
+                        "type": "string",
+                        "description": "密码,至少6位",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResLogin"
+                        }
+                    }
+                }
+            }
+        },
         "/register": {
             "post": {
                 "produces": [
                     "application/json"
                 ],
-                "summary": "注册社团账号3",
+                "summary": "注册社团账号",
                 "parameters": [
                     {
                         "maximum": 999999999999,
@@ -183,6 +219,19 @@ var doc = `{
         }
     },
     "definitions": {
+        "api.ResLogin": {
+            "type": "object",
+            "properties": {
+                "msg": {
+                    "description": "信息",
+                    "type": "string"
+                },
+                "token": {
+                    "description": "token",
+                    "type": "string"
+                }
+            }
+        },
         "api.ResPost": {
             "type": "object",
             "properties": {
@@ -246,6 +295,9 @@ var doc = `{
                     "description": "社团Id",
                     "type": "integer"
                 },
+                "club_name": {
+                    "type": "string"
+                },
                 "msg": {
                     "description": "信息",
                     "type": "string"
@@ -265,7 +317,7 @@ var doc = `{
                 },
                 "picture_id": {
                     "description": "图片Id",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "url": {
                     "description": "签名url",

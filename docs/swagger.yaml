@@ -1,4 +1,13 @@
 definitions:
+  api.ResLogin:
+    properties:
+      msg:
+        description: 信息
+        type: string
+      token:
+        description: token
+        type: string
+    type: object
   api.ResPost:
     properties:
       article:
@@ -44,6 +53,8 @@ definitions:
       club_id:
         description: 社团Id
         type: integer
+      club_name:
+        type: string
       msg:
         description: 信息
         type: string
@@ -58,7 +69,7 @@ definitions:
         type: string
       picture_id:
         description: 图片Id
-        type: string
+        type: integer
       url:
         description: 签名url
         type: string
@@ -77,10 +88,12 @@ paths:
       - description: 要发送的图片名
         in: query
         name: picture_name
+        required: true
         type: string
       - description: '"post_picture"或"avatar"'
         in: query
         name: type
+        required: true
         type: string
       produces:
       - application/json
@@ -90,6 +103,29 @@ paths:
           schema:
             $ref: '#/definitions/api.ResUrl'
       summary: 获取上传图片或头像的签名
+  /login:
+    post:
+      parameters:
+      - description: 社团名或社团账号,至少2位
+        in: formData
+        minLength: 2
+        name: club_name_or_id
+        required: true
+        type: string
+      - description: 密码,至少6位
+        in: formData
+        minLength: 6
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.ResLogin'
+      summary: 登录社团账号
   /register:
     post:
       parameters:
@@ -130,7 +166,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/api.ResRegister'
-      summary: 注册社团账号3
+      summary: 注册社团账号
   /user/post:
     get:
       parameters:
