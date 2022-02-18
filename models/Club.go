@@ -1,8 +1,10 @@
 package models
 
 import (
+	"golang.org/x/crypto/bcrypt"
 	"log"
 	"main/conf"
+	"main/middleware"
 	"time"
 )
 
@@ -26,11 +28,27 @@ func ExistClub(field string, value string) bool {
 	if e != nil {
 		log.Println(e)
 	}
-	log.Println(c)
+
 	if c.ID != 0 {
 		return true
 	}
 	return false
+}
+
+func VerifyPassword(field string, value string, password string) (token string, ok bool) {
+	var c ClubInfo
+	e := DB.Where(field+" = ?", value).Find(&c).Error
+	if e != nil {
+		log.Println(e)
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(c.Password), []byte(password)); err != nil {
+		return "", false
+	}
+	// 生成Token
+	tokenString, _ := middleware.GenToken(c.ID)
+
+	return tokenString, true
 }
 
 //创建社团信息和默认头像
