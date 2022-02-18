@@ -9,6 +9,12 @@ type Picture struct {
 	PictureAddr string `json:"picture_addr"` //图片的可访问地址
 }
 
+func GetNewPictureId() uint {
+	var p Picture
+	DB.Select("id").Last(&p)
+	return p.ID + 1
+}
+
 //头像
 type Avatar struct {
 	ID          uint   `json:"id"`

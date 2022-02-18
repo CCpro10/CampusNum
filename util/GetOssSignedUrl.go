@@ -33,7 +33,7 @@ func GetSignedUrl(SecurityToken string, AccessKeyId string, AccessKeySecret stri
 	if e != nil {
 		return
 	}
-	signedUrl, e = bucket.SignURL(pictureName, oss.HTTPPut, 300, []oss.Option{
+	signedUrl, e = bucket.SignURL(pictureName, oss.HTTPPut, 3600, []oss.Option{
 		oss.Callback(callbackStr),
 	}...)
 	return signedUrl, callbackStr, e
@@ -45,7 +45,7 @@ func callback(id uint, pictureName string) (string, error) {
 		CallbackBody     string `json:"callbackBody"`
 		CallbackBodyType string `json:"callbackBodyType"`
 	}{
-		"http://" + conf.Config.Deploy.ServerIp + "/club/callback",
+		"http://" + conf.Config.Deploy.ServerIp + "/callback",
 		"size=${size}" + "&picture_id=" + fmt.Sprint(id) + "&picture_name=" + pictureName,
 		"application/x-www-form-urlencoded",
 	}

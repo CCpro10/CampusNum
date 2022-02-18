@@ -2,20 +2,23 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"main/conf"
+	"main/models"
 	"main/util"
 	"net/http"
+	"strings"
 )
 
 type ResUrl struct {
 	Url         string `json:"url"`          //签名url
 	CallbackStr string `json:"callback_str"` //回调的字符串
-	PictureId   string `json:"picture_id"`   //图片Id
+	PictureId   uint   `json:"picture_id"`   //图片Id
 }
 
 type UrlParamList struct {
-	PictureName string `json:"picture_name"` //要发送的图片名
-	Type        string `json:"type"`         //"post_picture"或"avatar"
+	PictureName string `json:"picture_name"validate:"required"` //要发送的图片名
+	Type        string `json:"type"validate:"required"`         //"post_picture"或"avatar"
 }
 
 // @Summary 获取上传图片或头像的签名
@@ -26,7 +29,26 @@ type UrlParamList struct {
 // @Success 200 {object} ResUrl
 // @Router /club/signed_url [get]
 func GetSignedUrl(c *gin.Context) {
+	var request UrlParamList
+	request.Type = c.Query("type")
+	request.PictureName = c.Query("picture_name")
 
+	validate := validator.New()
+	err := validate.Struct(request)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"msg": "参数不符合规范,err=" + err.Error()})
+		return
+	}
+	if (request.Type != "post_picture") && (request.Type != "avatar") {
+		c.JSON(http.StatusBadRequest, gin.H{"msg": "type参数不符合规范"})
+		return
+	}
+	if len(strings.Split(request.PictureName, ".")) != 2 {
+		c.JSON(http.StatusBadRequest, gin.H{"msg": "图片名称不符合规范"})
+		return
+	}
+	//获取PictureId
+	PictureId := models.GetNewPictureId()
 	//获取sts
 	credentials := util.GetAssumeRole(
 		conf.Config.Oss.RegionId,
@@ -39,12 +61,13 @@ func GetSignedUrl(c *gin.Context) {
 		credentials.SecurityToken,
 		credentials.AccessKeyId,
 		credentials.AccessKeySecret,
-		"屏幕截图 2021-11-08 234931.png",
-		2,
-		"post_picture/")
+		request.PictureName,
+		PictureId,
+		request.Type+"/")
 
-	c.JSON(http.StatusOK, gin.H{
-		"url":          url,
-		"callback_str": callbackStr,
+	c.JSON(http.StatusOK, ResUrl{
+		url,
+		callbackStr,
+		PictureId,
 	})
 }

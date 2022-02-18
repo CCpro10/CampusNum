@@ -24,12 +24,13 @@ type ClubRegister struct {
 }
 
 type ResRegister struct {
-	Msg      string `json:"msg"`      //信息
-	ClubId   int64  `json:"club_id"`  //社团Id
+	Msg      string `json:"msg"`     //信息
+	ClubId   int64  `json:"club_id"` //社团Id
+	ClubName string `json:"club_name"`
 	Password string `json:"password"` //用户密码
 }
 
-// @Summary 注册社团账号3
+// @Summary 注册社团账号
 // @Produce json
 // @Param object formData ClubRegister true "注册所需要的参数"
 // @Success 200 {object} ResRegister
@@ -50,10 +51,9 @@ func Register(c *gin.Context) {
 	requestUser.ClubName = strings.TrimSpace(requestUser.ClubName)
 	requestUser.Password = strings.TrimSpace(requestUser.Password)
 	requestUser.Password2 = strings.TrimSpace(requestUser.Password2)
-	log.Println(requestUser)
+
 	validate := validator.New()        // 创建验证器
 	err = validate.Struct(requestUser) // 执行验证
-
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"msg": "参数不符合规范,err=" + err.Error()})
@@ -90,6 +90,7 @@ func Register(c *gin.Context) {
 	c.JSON(http.StatusOK, ResRegister{
 		"注册成功,请重新登陆",
 		requestUser.ClubId,
+		requestUser.ClubName,
 		requestUser.Password,
 	})
 
