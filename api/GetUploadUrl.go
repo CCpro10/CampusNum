@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"main/conf"
-	"main/models"
 	"main/util"
 	"net/http"
 	"strings"
@@ -13,7 +12,6 @@ import (
 type ResUrl struct {
 	Url         string `json:"url"`          //签名url
 	CallbackStr string `json:"callback_str"` //回调的字符串
-	PictureId   uint   `json:"picture_id"`   //图片Id
 }
 
 type UrlParamList struct {
@@ -47,8 +45,7 @@ func GetSignedUrl(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"msg": "图片名称不符合规范"})
 		return
 	}
-	//获取PictureId
-	PictureId := models.GetNewPictureId()
+
 	//获取sts
 	credentials := util.GetAssumeRole(
 		conf.Config.Oss.RegionId,
@@ -56,18 +53,16 @@ func GetSignedUrl(c *gin.Context) {
 		conf.Config.Oss.AccessKeySecret,
 		conf.Config.Oss.OssUploadRoleArn,
 		"XiaoChen").Credentials
-
+	//获取签名和callbackStr
 	url, callbackStr, _ := util.GetSignedUrl(
 		credentials.SecurityToken,
 		credentials.AccessKeyId,
 		credentials.AccessKeySecret,
 		request.PictureName,
-		PictureId,
 		request.Type+"/")
 
 	c.JSON(http.StatusOK, ResUrl{
 		url,
 		callbackStr,
-		PictureId,
 	})
 }

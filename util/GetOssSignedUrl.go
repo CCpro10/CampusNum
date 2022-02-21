@@ -12,7 +12,7 @@ import (
 )
 
 //通过临时角色，生成上传图片的临时URL,和回调的callbackStr
-func GetSignedUrl(SecurityToken string, AccessKeyId string, AccessKeySecret string, objectName string, PictureId uint, objectPath string) (signedUrl string, callbackStr string, e error) {
+func GetSignedUrl(SecurityToken string, AccessKeyId string, AccessKeySecret string, objectName string, objectPath string) (signedUrl string, callbackStr string, e error) {
 	yourEndpoint := "oss-cn-shenzhen.aliyuncs.com"
 	client, e := oss.New(yourEndpoint, AccessKeyId, AccessKeySecret, oss.SecurityToken(SecurityToken))
 	if e != nil {
@@ -29,7 +29,7 @@ func GetSignedUrl(SecurityToken string, AccessKeyId string, AccessKeySecret stri
 	suffix := path.Ext(objectName)                             //后缀
 	t := time.Now().UnixNano()                                 //随机名
 	pictureName := objectPath + fmt.Sprintf("%d%s", t, suffix) //图片名
-	callbackStr, e = callback(PictureId, pictureName)
+	callbackStr, e = callback(pictureName)
 	if e != nil {
 		return
 	}
@@ -39,14 +39,15 @@ func GetSignedUrl(SecurityToken string, AccessKeyId string, AccessKeySecret stri
 	return signedUrl, callbackStr, e
 }
 
-func callback(id uint, pictureName string) (string, error) {
+//pictureName 包括图片的路径
+func callback(pictureName string) (string, error) {
 	var callBackStruct = struct {
 		CallbackUrl      string `json:"callbackUrl"`
 		CallbackBody     string `json:"callbackBody"`
 		CallbackBodyType string `json:"callbackBodyType"`
 	}{
 		"http://" + conf.Config.Deploy.ServerIp + "/callback",
-		"size=${size}" + "&picture_id=" + fmt.Sprint(id) + "&picture_name=" + pictureName,
+		"size=${size}" + "&picture_name=" + pictureName,
 		"application/x-www-form-urlencoded",
 	}
 	log.Println(callBackStruct)
@@ -55,24 +56,4 @@ func callback(id uint, pictureName string) (string, error) {
 		return "", e
 	}
 	return base64.StdEncoding.EncodeToString(callbackStr), e
-}
-
-//func (a *async) SignUrl(id uint, suffix string) (string, uint, string, error) {
-//	callbackStr, num, e := a.callback(id)
-//	if e != nil {
-//		return "", 0, "", e
-//	}
-//	key, e := b.SignURL(a.path+fmt.Sprintf("%d.%s", id, suffix), oss.HTTPPut, 300, []oss.Option{
-//		oss.Callback(callbackStr),
-//	}...)
-//	return key, num, callbackStr, nil
-//}
-
-//修改为绑定的域名,获取可预览的地址
-func GetPreviewableUrl(oldUrl string) (url string) {
-	url = oldUrl[:len("http://incu-campus-num")] +
-		".ncuos.com" +
-		oldUrl[len("http://incu-campus-num.oss-cn-shenzhen.aliyuncs.com"):]
-	return
-
 }
