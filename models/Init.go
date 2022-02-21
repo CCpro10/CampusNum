@@ -30,7 +30,7 @@ func InitMySQL() {
 		Avatar{},
 		ClubInfo{},
 		User{},
-		Picture{},
+		PostPicture{},
 		Collection{},
 		Subscription{},
 	); err != nil {
