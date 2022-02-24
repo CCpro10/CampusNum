@@ -9,6 +9,7 @@ import (
 )
 
 type PicCallback struct {
+	ClubId      uint   `json:"club_id"form:"club_id"validate:"required"`
 	Size        uint64 `json:"size" form:"size" validate:"required"`
 	PictureName string `json:"picture_name" form:"picture_name" validate:"required"`
 }
@@ -17,7 +18,7 @@ func GetUrlByName(name string) string {
 	return "http://incu-campus-num.ncuos.com/" + name
 }
 
-//处理oss的回调内容
+//处理oss的回调内容,创建临时图片
 func Callback(c *gin.Context) {
 	var picCallback PicCallback
 	if e := c.ShouldBind(&picCallback); e != nil {
@@ -38,6 +39,7 @@ func Callback(c *gin.Context) {
 	//创建未和postId绑定的临时图片
 
 	var picture models.PostPicture
+	picture.ClubId = picCallback.ClubId
 	picture.PictureName = picCallback.PictureName
 	picture.PictureAddr = GetUrlByName(picture.PictureName)
 	id, _ := picture.CreatePicture()

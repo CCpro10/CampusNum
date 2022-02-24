@@ -27,6 +27,7 @@ type CreateResponse struct {
 // @Success 200 {object} CreateResponse
 // @Router /club/post [post]
 func CreatePost(c *gin.Context) {
+	//绑定参数并检验
 	var reqPost ReqPost
 	if err := c.ShouldBind(&reqPost); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"msg": "参数绑定失败"})
@@ -40,12 +41,13 @@ func CreatePost(c *gin.Context) {
 	}
 
 	//获取用户信息
-	ClubID, ok := c.Get("Account")
+	ClubId, ok := c.Get("ClubId")
 	if !ok {
 		c.JSON(http.StatusInternalServerError, gin.H{"msg": "获取用户信息失败"})
 		return
 	}
-	clubInfo := models.GetClubInfoById(ClubID.(uint))
+
+	clubInfo := models.GetClubInfoById(ClubId.(uint))
 	//检查图片能否上传
 	for _, v := range reqPost.PictureIds {
 		if ok := models.CheckPostPictureById(v); !ok {

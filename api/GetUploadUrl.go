@@ -46,6 +46,12 @@ func GetSignedUrl(c *gin.Context) {
 		return
 	}
 
+	//获取用户信息
+	ClubId, ok := c.Get("ClubId")
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"msg": "获取用户信息失败"})
+		return
+	}
 	//获取sts
 	credentials := util.GetAssumeRole(
 		conf.Config.Oss.RegionId,
@@ -54,7 +60,7 @@ func GetSignedUrl(c *gin.Context) {
 		conf.Config.Oss.OssUploadRoleArn,
 		"XiaoChen").Credentials
 	//获取签名和callbackStr
-	url, callbackStr, _ := util.GetSignedUrl(
+	url, callbackStr, _ := (ClubId.(util.ClubId)).GetSignedUrl(
 		credentials.SecurityToken,
 		credentials.AccessKeyId,
 		credentials.AccessKeySecret,
