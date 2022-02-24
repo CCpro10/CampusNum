@@ -11,7 +11,7 @@ import (
 //社团信息
 type ClubInfo struct {
 	ID           uint  `gorm:"primarykey"`
-	ClubId       int64 //社团注册时的账号
+	Account      int64 //社团注册时的账号
 	CreatedAt    time.Time
 	AvatarAddr   string `json:"avatar_addr"`                     //社团头像url地址
 	Introduction string `form:"introduction"json:"introduction"` //社团简介
@@ -35,6 +35,7 @@ func ExistClub(field string, value string) bool {
 	return false
 }
 
+//field为用户名或账号
 func VerifyPassword(field string, value string, password string) (token string, ok bool) {
 	var c ClubInfo
 	e := DB.Where(field+" = ?", value).Find(&c).Error
@@ -69,4 +70,10 @@ func CreateClubInfo(clubInfo *ClubInfo) bool {
 		return false
 	}
 	return true
+}
+
+func GetClubInfoById(id uint) ClubInfo {
+	var clubInfo ClubInfo
+	DB.Where("id = ?", id).Find(&clubInfo)
+	return clubInfo
 }
