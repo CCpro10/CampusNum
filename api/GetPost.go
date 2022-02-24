@@ -5,11 +5,6 @@ import (
 	"time"
 )
 
-func UploadPost(c *gin.Context) {
-	// @Success 200 {object} json "{"code":200,"data":{models.Post},"msg":"ok"}"
-	// @Param is_notice query bool true "是否为通知,是则为true"
-}
-
 type ResPost struct {
 	//Msg         string `json:"msg"`   //信息 如"获取成功"
 	ID          uint      `gorm:"primarykey"json:"id"` //帖子Id
@@ -18,6 +13,7 @@ type ResPost struct {
 	Article     string    `json:"article"`             //标题
 	Content     string    `json:"content"`             //内容
 	PictureAddr []string  `json:"picture_addr"`        //帖子图片的多个可访问地址
+	IsNotice    bool      `json:"is_notice"`           //是否为通知
 
 	ClubId     uint   `json:"club_id"`                   //社团Id
 	ClubName   string `form:"club_name"json:"club_name"` //社团名称

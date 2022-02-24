@@ -9,8 +9,8 @@ import (
 )
 
 type PicCallback struct {
-	Size        uint64 `json:"size" form:"size" binding:"required"`
-	PictureName string `json:"picture_name" form:"picture_name" binding:"required"`
+	Size        uint64 `json:"size" form:"size" validate:"required"`
+	PictureName string `json:"picture_name" form:"picture_name" validate:"required"`
 }
 
 func GetUrlByName(name string) string {
@@ -35,11 +35,14 @@ func Callback(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"200": "OK", "picture_id": id})
 		return
 	}
+	//创建未和postId绑定的临时图片
 
 	var picture models.PostPicture
 	picture.PictureName = picCallback.PictureName
 	picture.PictureAddr = GetUrlByName(picture.PictureName)
 	id, _ := picture.CreatePicture()
+
 	c.JSON(http.StatusOK, gin.H{"200": "OK", "picture_id": id})
 	return
+
 }

@@ -39,9 +39,9 @@ func GenToken(UserId uint) (string, error) {
 	return token.SignedString(MySecret)
 }
 
-// ParseToken 解析tokenstring，返回一个包含信息的用户声明
+// ParseToken 解析tokenString，返回一个包含信息的用户声明
 func ParseToken(tokenString string) (*MyClaims, error) {
-	// 通过(tokenstring,请求结构,返回秘钥的一个回调函数)这三个参数,返回一个token结构体,token包含了请求结构
+	// 通过(tokenString,请求结构,返回秘钥的一个回调函数)这三个参数,返回一个token结构体,token包含了请求结构
 	token, err := jwt.ParseWithClaims(tokenString, &MyClaims{}, func(token *jwt.Token) (i interface{}, err error) {
 		return MySecret, nil
 	})
@@ -85,8 +85,8 @@ func JWTAuthMiddleware(c *gin.Context) {
 		return
 	}
 
-	// 将当前请求的userid信息保存到请求的上下文c上
-	//后续的处理函数可以用过c.Get("userid")来获取当前请求的用户信息
-	c.Set("userid", mc.UserId)
+	// 将当前请求的信息保存到请求的上下文c上
+	//后续的处理函数可以用过c.Get("UserId")来获取当前请求的用户信息
+	c.Set("UserId", mc.UserId)
 	c.Next()
 }

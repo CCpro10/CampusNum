@@ -64,11 +64,11 @@ func Login(c *gin.Context) {
 		}
 	}
 	//输入的是账号
-	if !models.ExistClub("club_id", requestUser.ClubNameOrId) {
+	if !models.ExistClub("account", requestUser.ClubNameOrId) {
 		c.JSON(http.StatusBadRequest, gin.H{"msg": "此账号不存在"})
 		return
 	}
-	if Token, ok := models.VerifyPassword("club_id", requestUser.ClubNameOrId, requestUser.Password); !ok {
+	if Token, ok := models.VerifyPassword("account", requestUser.ClubNameOrId, requestUser.Password); !ok {
 		c.JSON(http.StatusBadRequest, gin.H{"msg": "密码输入错误"})
 		return
 	} else {
