@@ -1,4 +1,10 @@
 definitions:
+  api.CreateResponse:
+    properties:
+      msg:
+        description: 返回的信息
+        type: string
+    type: object
   api.ResLogin:
     properties:
       msg:
@@ -31,6 +37,9 @@ definitions:
       id:
         description: Msg         string `json:"msg"`   //信息 如"获取成功"
         type: integer
+      is_notice:
+        description: 是否为通知
+        type: boolean
       picture_addr:
         description: 帖子图片的多个可访问地址
         items:
@@ -67,9 +76,6 @@ definitions:
       callback_str:
         description: 回调的字符串
         type: string
-      picture_id:
-        description: 图片Id
-        type: integer
       url:
         description: 签名url
         type: string
@@ -77,6 +83,26 @@ definitions:
 info:
   contact: {}
 paths:
+  /club/post:
+    post:
+      parameters:
+      - description: Bearer 用户令牌 例:Bearer fbhraewifvg43uwerfaewobf
+        in: header
+        name: Authorization
+        type: string
+      - description: 请求所需的参数
+        in: formData
+        name: ReqPost
+        required: true
+        type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.CreateResponse'
+      summary: 创建活动或动态
   /club/signed_url:
     get:
       description: 获取上传图片的url及回调字符串,图片Id

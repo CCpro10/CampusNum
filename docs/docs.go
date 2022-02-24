@@ -23,6 +23,37 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/club/post": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "创建活动或动态",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌 例:Bearer fbhraewifvg43uwerfaewobf",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "object",
+                        "description": "请求所需的参数",
+                        "name": "ReqPost",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.CreateResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/club/signed_url": {
             "get": {
                 "description": "获取上传图片的url及回调字符串,图片Id",
@@ -219,6 +250,15 @@ var doc = `{
         }
     },
     "definitions": {
+        "api.CreateResponse": {
+            "type": "object",
+            "properties": {
+                "msg": {
+                    "description": "返回的信息",
+                    "type": "string"
+                }
+            }
+        },
         "api.ResLogin": {
             "type": "object",
             "properties": {
@@ -262,6 +302,10 @@ var doc = `{
                 "id": {
                     "description": "Msg         string ` + "`" + `json:\"msg\"` + "`" + `   //信息 如\"获取成功\"",
                     "type": "integer"
+                },
+                "is_notice": {
+                    "description": "是否为通知",
+                    "type": "boolean"
                 },
                 "picture_addr": {
                     "description": "帖子图片的多个可访问地址",
@@ -314,10 +358,6 @@ var doc = `{
                 "callback_str": {
                     "description": "回调的字符串",
                     "type": "string"
-                },
-                "picture_id": {
-                    "description": "图片Id",
-                    "type": "integer"
                 },
                 "url": {
                     "description": "签名url",
