@@ -24,7 +24,7 @@ func (post *Post) CreatePost(clubId uint, pictureIds []uint) (err error) {
 	DB.Last(post)
 	//将上传的临时图片和post绑定
 	for _, id := range pictureIds {
-		DB.Model(PostPicture{}).Where("id = ?", id).Updates(PostPicture{PostId: post.ID})
+		DB.Model(PostPicture{}).Where("id = ?", id).Update("post_id", post.ID)
 	}
 	//调用oss,删除未上传的临时图片
 

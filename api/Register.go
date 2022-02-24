@@ -5,12 +5,11 @@ import (
 	"github.com/go-playground/validator/v10"
 	"golang.org/x/crypto/bcrypt"
 	"log"
-	"main/conf"
 	"main/models"
+	"main/util"
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 )
 
 //用户注册信息
@@ -43,11 +42,11 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"msg": "注册参数绑定失败:" + err.Error()})
 		return
 	}
-	if !verifyCode(requestUser.InvitationCode) {
+	if !util.VerifyCode(requestUser.InvitationCode) {
 		c.JSON(http.StatusBadRequest, gin.H{"msg": ":邀请码无效或过期"})
 		return
 	}
-
+	//去空格
 	requestUser.ClubName = strings.TrimSpace(requestUser.ClubName)
 	requestUser.Password = strings.TrimSpace(requestUser.Password)
 	requestUser.Password2 = strings.TrimSpace(requestUser.Password2)
@@ -94,16 +93,4 @@ func Register(c *gin.Context) {
 		requestUser.Password,
 	})
 
-}
-
-//判断邀请码是否有效
-func verifyCode(code int64) bool {
-	m := int(time.Now().Month())
-	d := time.Now().Day()
-	c := (int64(m*d + 7)) * conf.Config.Deploy.Secret
-
-	if c != code {
-		return false
-	}
-	return true
 }

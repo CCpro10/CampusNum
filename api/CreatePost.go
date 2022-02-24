@@ -9,7 +9,7 @@ import (
 
 //请求要增加的帖子
 type ReqPost struct {
-	IsNotice   bool   `form:"js_notice"json:"is_notice"validate:"required"`    //是否为通知
+	IsNotice   bool   `form:"is_notice"json:"is_notice"validate:"required"`    //是否为通知
 	Article    string `form:"article"json:"article"validate:"required,min=2"`  //标题,min=2
 	Content    string `form:"content"json:"content"validate:"required,min=10"` //内容,min=10
 	PictureIds []uint `form:"picture_ids"json:"picture_ids"validate:"max=9"`   //包涵要上传的帖子图片的id的数组,最多9张图
@@ -23,7 +23,7 @@ type CreateResponse struct {
 // @Summary 创建活动或动态
 // @Produce json
 // @Param Authorization header string false "Bearer 用户令牌 例:Bearer fbhraewifvg43uwerfaewobf"
-// @Param ReqPost formData object true "请求所需的参数"
+// @Param object formData ReqPost true "请求所需的参数"
 // @Success 200 {object} CreateResponse
 // @Router /club/post [post]
 func CreatePost(c *gin.Context) {
@@ -50,7 +50,7 @@ func CreatePost(c *gin.Context) {
 	clubInfo := models.GetClubInfoById(ClubId.(uint))
 	//检查图片能否上传
 	for _, v := range reqPost.PictureIds {
-		if ok := models.CheckPostPictureById(v); !ok {
+		if ok := models.CheckPostPictureById(ClubId.(uint), v); !ok {
 			c.JSON(http.StatusBadRequest, gin.H{"msg": "图片Id有误"})
 			return
 		}

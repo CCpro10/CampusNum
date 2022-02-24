@@ -17,9 +17,13 @@ func (p *Avatar) CreatePicture() (newId uint, err error) {
 }
 
 //通过id检查图片是否为能上传的临时图片
-func CheckPostPictureById(id uint) (ok bool) {
+func CheckPostPictureById(clubId uint, id uint) (ok bool) {
 	var p PostPicture
-	DB.Select("post_id", "id").Where("id = ?", id).Find(&p)
+	DB.Where("id = ?", id).Find(&p)
+	//不是用户上传的临时图片
+	if p.ClubId != clubId {
+		return false
+	}
 	//图片不存在
 	if p.ID == 0 {
 		return false
