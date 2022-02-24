@@ -17,3 +17,19 @@ type Post struct {
 	ClubName string `form:"club_name"json:"club_name"` //社团名称
 
 }
+
+//发布活动或动态
+func (post *Post) CreatePost(clubId uint, pictureIds []uint) (err error) {
+	DB.Create(post)
+	DB.Last(post)
+	//将上传的临时图片和post绑定
+	for _, id := range pictureIds {
+		DB.Model(PostPicture{}).Where("id = ?", id).Updates(PostPicture{PostId: post.ID})
+	}
+	//调用oss,删除未上传的临时图片
+
+	//删除此社团用户所有未上传的临时图片
+	DB.Where("id=? and post_id=?", clubId, 0).Delete(PostPicture{})
+
+	return nil
+}
