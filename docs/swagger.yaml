@@ -90,11 +90,30 @@ paths:
         in: header
         name: Authorization
         type: string
-      - description: 请求所需的参数
+      - description: 标题,min=2
         in: formData
-        name: ReqPost
+        minLength: 2
+        name: article
         required: true
-        type: object
+        type: string
+      - description: 内容,min=10
+        in: formData
+        minLength: 10
+        name: content
+        required: true
+        type: string
+      - description: 是否为通知
+        in: formData
+        name: is_notice
+        required: true
+        type: boolean
+      - description: 包涵要上传的帖子图片的id的数组,最多9张图
+        in: formData
+        items:
+          type: integer
+        maxItems: 9
+        name: picture_ids
+        type: array
       produces:
       - application/json
       responses:

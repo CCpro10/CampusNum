@@ -37,11 +37,37 @@ var doc = `{
                         "in": "header"
                     },
                     {
-                        "type": "object",
-                        "description": "请求所需的参数",
-                        "name": "ReqPost",
+                        "minLength": 2,
+                        "type": "string",
+                        "description": "标题,min=2",
+                        "name": "article",
                         "in": "formData",
                         "required": true
+                    },
+                    {
+                        "minLength": 10,
+                        "type": "string",
+                        "description": "内容,min=10",
+                        "name": "content",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "是否为通知",
+                        "name": "is_notice",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "maxItems": 9,
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "包涵要上传的帖子图片的id的数组,最多9张图",
+                        "name": "picture_ids",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
