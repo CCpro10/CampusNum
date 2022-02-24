@@ -20,7 +20,7 @@ func BeginRouters(r *gin.Engine) {
 	ClubGroup.Use(middleware.JWTAuthMiddleware)
 	{
 		//发通知或动态
-		ClubGroup.POST("post", api.UploadPost)
+		ClubGroup.POST("post", api.CreatePost)
 
 		ClubGroup.GET("signed_url", api.GetSignedUrl)
 	}

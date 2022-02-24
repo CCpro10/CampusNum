@@ -78,7 +78,7 @@ func Register(c *gin.Context) {
 
 	//创建用户实例,存入注册信息
 	var clubInfo = models.ClubInfo{
-		ClubId:   requestUser.ClubId,
+		Account:  requestUser.ClubId,
 		ClubName: requestUser.ClubName,
 		Password: string(hashPassword),
 	}
