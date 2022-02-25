@@ -14,7 +14,7 @@ func BeginRouters(r *gin.Engine) {
 
 	r.Use(middleware.Cors())
 	r.POST("/register", api.Register)
-	r.POST("/login", api.Login)
+	r.GET("/login", api.Login)
 	r.POST("callback", api.Callback)
 	ClubGroup := r.Group("/club")
 	ClubGroup.Use(middleware.JWTAuthMiddleware)

@@ -25,7 +25,7 @@ type ResLogin struct {
 // @Produce json
 // @Param object formData ClubLogin true "登录所需要的参数"
 // @Success 200 {object} ResLogin
-// @Router /login [post]
+// @Router /login [get]
 func Login(c *gin.Context) {
 	var requestUser ClubLogin
 	err := c.ShouldBind(&requestUser)
