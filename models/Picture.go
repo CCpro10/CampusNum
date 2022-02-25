@@ -35,6 +35,16 @@ func CheckPostPictureById(clubId uint, id uint) (ok bool) {
 	return true
 }
 
+//通过postId获取帖子的图片地址
+func GetPictureAddrByPostId(postId interface{}) (PictureAddr []string, ok bool) {
+	var pictures []PostPicture
+	DB.Where("post_id=?", postId).Find(&pictures)
+	for _, pic := range pictures {
+		PictureAddr = append(PictureAddr, pic.PictureAddr)
+	}
+	return PictureAddr, true
+}
+
 //通知或动态的图片
 type PostPicture struct {
 	ID          uint   `json:"id"`
@@ -42,6 +52,13 @@ type PostPicture struct {
 	PostId      uint   `json:"post_id"`      //帖子的Id
 	PictureName string `json:"picture_name"` //图片在oss的完整路径及名称
 	PictureAddr string `json:"picture_addr"` //图片的可访问地址
+}
+
+func GetAvatarAddrByClubId(clubId interface{}) (string, bool) {
+	var a Avatar
+	DB.Select("picture_addr").Where("club_id=?", clubId).Find(&a)
+
+	return a.PictureAddr, true
 }
 
 //头像

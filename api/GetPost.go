@@ -1,11 +1,15 @@
 package api
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"main/models"
+	"net/http"
+	"strconv"
 	"time"
 )
 
-type ResPost struct {
+type ResponsePost struct {
 	//Msg         string `json:"msg"`   //信息 如"获取成功"
 	ID          uint      `gorm:"primarykey"json:"id"` //帖子Id
 	CreatedAt   time.Time `json:"created_at"`          //创建时间
@@ -20,16 +24,39 @@ type ResPost struct {
 	AvatarAddr string `json:"avatar_addr"`               //头像url地址
 }
 
-type ResPosts struct {
-	Data []ResPost `json:"data"` //data内包涵多条帖子数据
+type ResponsePosts struct {
+	Data []ResponsePost `json:"data"` //data内包涵多条帖子数据
 }
 
 // @Summary 获取单条通知/动态(详情)
 // @Produce json
-// @Param post_id query uint true "帖子的id"
-// @Success 200 {object} ResPost
+// @Param post_id query uint true "帖子的id,min=1"
+// @Success 200 {object} ResponsePost
 // @Router /user/post [get]
 func GetPost(c *gin.Context) {
+	//获取参数,检查格式
+	req := c.Query("post_id")
+	reqPostId, e := strconv.ParseUint(req, 10, 32)
+	if e != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"msg": "post_id参数格式错误"})
+		return
+	}
+	post, ok := models.GetPostById(reqPostId)
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{"msg": "post_id不存在"})
+		return
+	}
+	//把post的值放到rep中
+	bytes, _ := json.Marshal(post)
+	var rsp ResponsePost
+	_ = json.Unmarshal(bytes, &rsp)
+	//获取头像
+	rsp.AvatarAddr, _ = models.GetAvatarAddrByClubId(post.ClubId)
+	//获取图片
+	rsp.PictureAddr, _ = models.GetPictureAddrByPostId(post.ID)
+
+	c.JSON(http.StatusOK, rsp)
+	return
 
 }
 
@@ -43,7 +70,7 @@ type postParamList struct {
 // @Summary 获取最新的多条通知/动态
 // @Produce json
 // @Param object query postParamList true "参数列表"
-// @Success 200 {object} ResPosts "data内有多条post"
+// @Success 200 {object} ResponsePosts "data内有多条post"
 // @Router /user/posts [get]
 func GetPosts(c *gin.Context) {
 
