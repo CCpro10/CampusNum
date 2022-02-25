@@ -1,8 +1,6 @@
 package models
 
 import (
-	"encoding/json"
-	"main/api"
 	"time"
 )
 
@@ -30,27 +28,12 @@ func GetPostById(postId interface{}) (*Post, bool) {
 }
 
 //获取最新的通知或动态
-func GetPosts(isNotice bool, page int, size int) (resPosts []api.ResponsePost, ok bool) {
+func GetPosts(isNotice bool, page int, size int) (Posts *[]Post, ok bool) {
 	var posts []Post
 	offsetNum := (page - 1) * size
 	DB.Where("is_notice=?", isNotice).Limit(size).Offset(offsetNum).Order("id desc").Find(&posts)
-	for _, post := range posts {
-		resPosts = append(resPosts, *BindPost(&post))
-	}
 
-	return resPosts, true
-}
-
-//绑定帖子的图片已经社团头像
-func BindPost(post *Post) (rspPost *api.ResponsePost) {
-	//把post的值放到rep中
-	bytes, _ := json.Marshal(post)
-	_ = json.Unmarshal(bytes, &rspPost)
-	//获取头像
-	rspPost.AvatarAddr, _ = GetAvatarAddrByClubId(post.ClubId)
-	//获取图片
-	rspPost.PictureAddr, _ = GetPictureAddrByPostId(post.ID)
-	return
+	return &posts, true
 }
 
 //发布活动或动态

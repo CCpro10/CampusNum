@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"log"
@@ -41,7 +42,24 @@ func GetPosts(c *gin.Context) {
 
 	posts, _ := models.GetPosts(request.IsNotice, request.Page, request.Size)
 
-	c.JSON(http.StatusOK, posts)
+	var resPosts []ResponsePost
+	for _, post := range *posts {
+		resPosts = append(resPosts, *BindPost(&post))
+	}
+
+	c.JSON(http.StatusOK, resPosts)
 	return
 
+}
+
+//绑定帖子的图片已经社团头像
+func BindPost(post *models.Post) (rspPost *ResponsePost) {
+	//把post的值放到rep中
+	bytes, _ := json.Marshal(post)
+	_ = json.Unmarshal(bytes, &rspPost)
+	//获取头像
+	rspPost.AvatarAddr, _ = models.GetAvatarAddrByClubId(post.ClubId)
+	//获取图片
+	rspPost.PictureAddr, _ = models.GetPictureAddrByPostId(post.ID)
+	return
 }
