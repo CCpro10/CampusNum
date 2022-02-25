@@ -14,7 +14,30 @@ definitions:
         description: token
         type: string
     type: object
-  api.ResPost:
+  api.ResRegister:
+    properties:
+      club_id:
+        description: 社团Id
+        type: integer
+      club_name:
+        type: string
+      msg:
+        description: 信息
+        type: string
+      password:
+        description: 用户密码
+        type: string
+    type: object
+  api.ResUrl:
+    properties:
+      callback_str:
+        description: 回调的字符串
+        type: string
+      url:
+        description: 签名url
+        type: string
+    type: object
+  api.ResponsePost:
     properties:
       article:
         description: 标题
@@ -49,36 +72,13 @@ definitions:
         description: 更新时间(刚创建时为空)
         type: string
     type: object
-  api.ResPosts:
+  api.ResponsePosts:
     properties:
       data:
         description: data内包涵多条帖子数据
         items:
-          $ref: '#/definitions/api.ResPost'
+          $ref: '#/definitions/api.ResponsePost'
         type: array
-    type: object
-  api.ResRegister:
-    properties:
-      club_id:
-        description: 社团Id
-        type: integer
-      club_name:
-        type: string
-      msg:
-        description: 信息
-        type: string
-      password:
-        description: 用户密码
-        type: string
-    type: object
-  api.ResUrl:
-    properties:
-      callback_str:
-        description: 回调的字符串
-        type: string
-      url:
-        description: 签名url
-        type: string
     type: object
 info:
   contact: {}
@@ -105,7 +105,6 @@ paths:
       - description: 是否为通知
         in: formData
         name: is_notice
-        required: true
         type: boolean
       - description: 包涵要上传的帖子图片的id的数组,最多9张图
         in: formData
@@ -149,7 +148,7 @@ paths:
             $ref: '#/definitions/api.ResUrl'
       summary: 获取上传图片或头像的签名
   /login:
-    post:
+    get:
       parameters:
       - description: 社团名或社团账号,至少2位
         in: formData
@@ -215,7 +214,7 @@ paths:
   /user/post:
     get:
       parameters:
-      - description: 帖子的id
+      - description: 帖子的id,min=1
         in: query
         name: post_id
         required: true
@@ -226,7 +225,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.ResPost'
+            $ref: '#/definitions/api.ResponsePost'
       summary: 获取单条通知/动态(详情)
   /user/posts:
     get:
@@ -238,12 +237,17 @@ paths:
       - description: 页码,最小为1
         example: 1
         in: query
+        minimum: 1
         name: page
+        required: true
         type: integer
-      - description: 每页数据量
+      - description: 每页数据量,最大为40
         example: 10
         in: query
+        maximum: 40
+        minimum: 1
         name: size
+        required: true
         type: integer
       produces:
       - application/json
@@ -251,6 +255,6 @@ paths:
         "200":
           description: data内有多条post
           schema:
-            $ref: '#/definitions/api.ResPosts'
+            $ref: '#/definitions/api.ResponsePosts'
       summary: 获取最新的多条通知/动态
 swagger: "2.0"

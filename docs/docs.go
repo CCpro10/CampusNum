@@ -56,8 +56,7 @@ var doc = `{
                         "type": "boolean",
                         "description": "是否为通知",
                         "name": "is_notice",
-                        "in": "formData",
-                        "required": true
+                        "in": "formData"
                     },
                     {
                         "maxItems": 9,
@@ -120,7 +119,7 @@ var doc = `{
             }
         },
         "/login": {
-            "post": {
+            "get": {
                 "produces": [
                     "application/json"
                 ],
@@ -220,7 +219,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "帖子的id",
+                        "description": "帖子的id,min=1",
                         "name": "post_id",
                         "in": "query",
                         "required": true
@@ -230,7 +229,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.ResPost"
+                            "$ref": "#/definitions/api.ResponsePost"
                         }
                     }
                 }
@@ -250,25 +249,30 @@ var doc = `{
                         "in": "query"
                     },
                     {
+                        "minimum": 1,
                         "type": "integer",
                         "example": 1,
                         "description": "页码,最小为1",
                         "name": "page",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     },
                     {
+                        "maximum": 40,
+                        "minimum": 1,
                         "type": "integer",
                         "example": 10,
-                        "description": "每页数据量",
+                        "description": "每页数据量,最大为40",
                         "name": "size",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "data内有多条post",
                         "schema": {
-                            "$ref": "#/definitions/api.ResPosts"
+                            "$ref": "#/definitions/api.ResponsePosts"
                         }
                     }
                 }
@@ -298,7 +302,40 @@ var doc = `{
                 }
             }
         },
-        "api.ResPost": {
+        "api.ResRegister": {
+            "type": "object",
+            "properties": {
+                "club_id": {
+                    "description": "社团Id",
+                    "type": "integer"
+                },
+                "club_name": {
+                    "type": "string"
+                },
+                "msg": {
+                    "description": "信息",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "用户密码",
+                    "type": "string"
+                }
+            }
+        },
+        "api.ResUrl": {
+            "type": "object",
+            "properties": {
+                "callback_str": {
+                    "description": "回调的字符串",
+                    "type": "string"
+                },
+                "url": {
+                    "description": "签名url",
+                    "type": "string"
+                }
+            }
+        },
+        "api.ResponsePost": {
             "type": "object",
             "properties": {
                 "article": {
@@ -346,48 +383,15 @@ var doc = `{
                 }
             }
         },
-        "api.ResPosts": {
+        "api.ResponsePosts": {
             "type": "object",
             "properties": {
                 "data": {
                     "description": "data内包涵多条帖子数据",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/api.ResPost"
+                        "$ref": "#/definitions/api.ResponsePost"
                     }
-                }
-            }
-        },
-        "api.ResRegister": {
-            "type": "object",
-            "properties": {
-                "club_id": {
-                    "description": "社团Id",
-                    "type": "integer"
-                },
-                "club_name": {
-                    "type": "string"
-                },
-                "msg": {
-                    "description": "信息",
-                    "type": "string"
-                },
-                "password": {
-                    "description": "用户密码",
-                    "type": "string"
-                }
-            }
-        },
-        "api.ResUrl": {
-            "type": "object",
-            "properties": {
-                "callback_str": {
-                    "description": "回调的字符串",
-                    "type": "string"
-                },
-                "url": {
-                    "description": "签名url",
-                    "type": "string"
                 }
             }
         }
