@@ -19,7 +19,7 @@ func (p *Avatar) CreatePicture() (newId uint, err error) {
 //通过id检查图片是否为能上传的临时图片
 func CheckPostPictureById(clubId uint, id uint) (ok bool) {
 	var p PostPicture
-	DB.Where("id = ?", id).Find(&p)
+	DB.Where("id = ?", id).First(&p)
 	//不是用户上传的临时图片
 	if p.ClubId != clubId {
 		return false
@@ -56,7 +56,7 @@ type PostPicture struct {
 
 func GetAvatarAddrByClubId(clubId interface{}) (string, bool) {
 	var a Avatar
-	DB.Select("picture_addr").Where("club_id=?", clubId).Find(&a)
+	DB.Select("picture_addr").Where("club_id=?", clubId).First(&a)
 
 	return a.PictureAddr, true
 }

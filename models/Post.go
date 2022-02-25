@@ -21,7 +21,7 @@ type Post struct {
 //通过Id获取post
 func GetPostById(postId interface{}) (*Post, bool) {
 	var p Post
-	DB.Where("id =?", postId).Find(&p)
+	DB.Where("id =?", postId).First(&p)
 	if p.ID == 0 {
 		return nil, false
 	}

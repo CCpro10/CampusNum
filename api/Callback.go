@@ -37,7 +37,7 @@ func Callback(c *gin.Context) {
 		return
 	}
 	//创建未和postId绑定的临时图片
-
+	//获取回调信息,创建临时图片
 	var picture models.PostPicture
 	picture.ClubId = picCallback.ClubId
 	picture.PictureName = picCallback.PictureName

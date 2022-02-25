@@ -9,7 +9,7 @@ import (
 
 //请求要增加的帖子
 type ReqPost struct {
-	IsNotice   bool   `form:"is_notice"json:"is_notice"validate:"required"`    //是否为通知
+	IsNotice   bool   `form:"is_notice"json:"is_notice"`                       //是否为通知
 	Article    string `form:"article"json:"article"validate:"required,min=2"`  //标题,min=2
 	Content    string `form:"content"json:"content"validate:"required,min=10"` //内容,min=10
 	PictureIds []uint `form:"picture_ids"json:"picture_ids"validate:"max=9"`   //包涵要上传的帖子图片的id的数组,最多9张图

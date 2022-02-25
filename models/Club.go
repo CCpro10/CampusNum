@@ -21,10 +21,10 @@ type ClubInfo struct {
 
 }
 
-//存在则返回true
+//通过ID,account,club_name判断社团是否存在,存在则返回true
 func ExistClub(field string, value string) bool {
 	var c ClubInfo
-	e := DB.Where(field+" = ?", value).Find(&c).Error
+	e := DB.Where(field+" = ?", value).First(&c).Error
 	if e != nil {
 		log.Println(e)
 	}
@@ -38,7 +38,7 @@ func ExistClub(field string, value string) bool {
 //field为用户名或账号
 func VerifyPassword(field string, value string, password string) (token string, ok bool) {
 	var c ClubInfo
-	e := DB.Where(field+" = ?", value).Find(&c).Error
+	e := DB.Where(field+" = ?", value).First(&c).Error
 	if e != nil {
 		log.Println(e)
 	}
@@ -74,6 +74,6 @@ func CreateClubInfo(clubInfo *ClubInfo) bool {
 
 func GetClubInfoById(id uint) ClubInfo {
 	var clubInfo ClubInfo
-	DB.Where("id = ?", id).Find(&clubInfo)
+	DB.Where("id = ?", id).First(&clubInfo)
 	return clubInfo
 }
