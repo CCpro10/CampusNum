@@ -60,7 +60,7 @@ func GetSignedUrl(c *gin.Context) {
 		conf.Config.Oss.OssUploadRoleArn,
 		"XiaoChen").Credentials
 	//获取签名和callbackStr
-	url, callbackStr, _ := (ClubId.(util.ClubId)).GetSignedUrl(
+	url, callbackStr, _ := util.ClubId(ClubId.(uint)).GetSignedUrl(
 		credentials.SecurityToken,
 		credentials.AccessKeyId,
 		credentials.AccessKeySecret,
