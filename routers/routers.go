@@ -22,6 +22,8 @@ func BeginRouters(r *gin.Engine) {
 		//发通知或动态
 		ClubGroup.POST("post", api.CreatePost)
 
+		ClubGroup.PUT("introduction", api.ModifyClubIntroduction)
+		//获取签名
 		ClubGroup.GET("signed_url", api.GetSignedUrl)
 	}
 
