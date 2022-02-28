@@ -21,6 +21,11 @@ type ClubInfo struct {
 
 }
 
+func ModifyClubIntroductionById(clubId interface{}, introduction string) bool {
+	DB.Model(ClubInfo{}).Where("id=?", clubId).Update("introduction", introduction)
+	return true
+}
+
 //通过ID,account,club_name判断社团是否存在,存在则返回true
 func ExistClub(field string, value string) bool {
 	var c ClubInfo
