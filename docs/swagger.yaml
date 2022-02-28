@@ -37,6 +37,12 @@ definitions:
         description: 签名url
         type: string
     type: object
+  api.Response:
+    properties:
+      msg:
+        description: 返回的信息
+        type: string
+    type: object
   api.ResponsePost:
     properties:
       article:
@@ -83,12 +89,34 @@ definitions:
 info:
   contact: {}
 paths:
+  /club/introduction:
+    put:
+      parameters:
+      - description: Bearer 用户令牌 例:Bearer fbhraewifvg43uwerfaewobf
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 社团简介
+        in: formData
+        name: introduction
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: 修改社团简介
   /club/post:
     post:
       parameters:
       - description: Bearer 用户令牌 例:Bearer fbhraewifvg43uwerfaewobf
         in: header
         name: Authorization
+        required: true
         type: string
       - description: 标题,min=2
         in: formData

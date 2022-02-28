@@ -22,7 +22,7 @@ type CreateResponse struct {
 
 // @Summary 创建活动或动态
 // @Produce json
-// @Param Authorization header string false "Bearer 用户令牌 例:Bearer fbhraewifvg43uwerfaewobf"
+// @Param Authorization header string true "Bearer 用户令牌 例:Bearer fbhraewifvg43uwerfaewobf"
 // @Param object formData ReqPost true "请求所需的参数"
 // @Success 200 {object} CreateResponse
 // @Router /club/post [post]

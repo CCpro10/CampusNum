@@ -14,7 +14,8 @@ type Response struct {
 
 // @Summary 修改社团简介
 // @Produce json
-// @Param introduction fromData string true "社团简介"
+// @Param Authorization header string true "Bearer 用户令牌 例:Bearer fbhraewifvg43uwerfaewobf"
+// @Param introduction formData string true "社团简介"
 // @Success 200 {object} Response
 // @Router /club/introduction [put]
 func ModifyClubIntroduction(c *gin.Context) {

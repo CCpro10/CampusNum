@@ -23,6 +23,38 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/club/introduction": {
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "修改社团简介",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌 例:Bearer fbhraewifvg43uwerfaewobf",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "社团简介",
+                        "name": "introduction",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/club/post": {
             "post": {
                 "produces": [
@@ -34,7 +66,8 @@ var doc = `{
                         "type": "string",
                         "description": "Bearer 用户令牌 例:Bearer fbhraewifvg43uwerfaewobf",
                         "name": "Authorization",
-                        "in": "header"
+                        "in": "header",
+                        "required": true
                     },
                     {
                         "minLength": 2,
@@ -331,6 +364,15 @@ var doc = `{
                 },
                 "url": {
                     "description": "签名url",
+                    "type": "string"
+                }
+            }
+        },
+        "api.Response": {
+            "type": "object",
+            "properties": {
+                "msg": {
+                    "description": "返回的信息",
                     "type": "string"
                 }
             }
