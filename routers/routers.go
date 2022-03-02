@@ -31,7 +31,7 @@ func BeginRouters(r *gin.Engine) {
 	{
 		//获取单条通知或动态
 		UserGroup.GET("post", api.GetPost)
-
+		UserGroup.GET("club_info", api.ShowClubInfo)
 		UserGroup.GET("posts", api.GetPosts)
 	}
 

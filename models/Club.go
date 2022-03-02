@@ -10,14 +10,14 @@ import (
 
 //社团信息
 type ClubInfo struct {
-	ID           uint  `gorm:"primarykey"`
-	Account      int64 //社团注册时的账号
-	CreatedAt    time.Time
-	AvatarAddr   string `form:"avatar_addr"json:"avatar_addr"`   //社团头像url地址
-	Introduction string `form:"introduction"json:"introduction"` //社团简介
-	Email        string `form:"email"json:"email"`               //电子邮箱
-	ClubName     string `form:"club_name"json:"club_name"`       //社团名称
-	Password     string `form:"password"json:"password"`         //密码
+	ID           uint      `gorm:"primarykey"json:"id"`
+	Account      int64     `form:"account"json:"account"` //社团注册时的账号
+	CreatedAt    time.Time `form:"created_at"json:"created_at"`
+	AvatarAddr   string    `form:"avatar_addr"json:"avatar_addr"`   //社团头像url地址
+	Introduction string    `form:"introduction"json:"introduction"` //社团简介
+	Email        string    `form:"email"json:"email"`               //电子邮箱
+	ClubName     string    `form:"club_name"json:"club_name"`       //社团名称
+	Password     string    `form:"password"json:"password"`         //密码
 
 }
 
@@ -27,7 +27,7 @@ func ModifyClubIntroductionById(clubId interface{}, introduction string) bool {
 }
 
 //通过ID,account,club_name判断社团是否存在,存在则返回true
-func ExistClub(field string, value string) bool {
+func ExistClub(field string, value interface{}) bool {
 	var c ClubInfo
 	e := DB.Where(field+" = ?", value).First(&c).Error
 	if e != nil {
@@ -77,7 +77,7 @@ func CreateClubInfo(clubInfo *ClubInfo) bool {
 	return true
 }
 
-func GetClubInfoById(id uint) ClubInfo {
+func GetClubInfoById(id interface{}) ClubInfo {
 	var clubInfo ClubInfo
 	DB.Where("id = ?", id).First(&clubInfo)
 	return clubInfo
