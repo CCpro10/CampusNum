@@ -243,6 +243,31 @@ var doc = `{
                 }
             }
         },
+        "/user/club_info": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "查看社团信息,可用于展示社团的页面",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "社团id",
+                        "name": "club_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.ResponseClubInfo"
+                        }
+                    }
+                }
+            }
+        },
         "/user/post": {
             "get": {
                 "produces": [
@@ -374,6 +399,33 @@ var doc = `{
                 "msg": {
                     "description": "返回的信息",
                     "type": "string"
+                }
+            }
+        },
+        "api.ResponseClubInfo": {
+            "type": "object",
+            "properties": {
+                "avatar_addr": {
+                    "description": "社团头像url地址",
+                    "type": "string"
+                },
+                "club_name": {
+                    "description": "社团名称",
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "introduction": {
+                    "description": "社团简介",
+                    "type": "string"
+                },
+                "num_of_fans": {
+                    "description": "粉丝数",
+                    "type": "integer"
                 }
             }
         },
