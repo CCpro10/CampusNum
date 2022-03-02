@@ -10,12 +10,13 @@ import (
 )
 
 type ResponseClubInfo struct {
-	ID           uint      `gorm:"primarykey"json:"id"`
-	CreatedAt    time.Time `form:"created_at"json:"created_at"`
-	AvatarAddr   string    `form:"avatar_addr"json:"avatar_addr"`   //社团头像url地址
-	Introduction string    `form:"introduction"json:"introduction"` //社团简介
-	ClubName     string    `form:"club_name"json:"club_name"`       //社团名称
-	NumOfFans    int       `json:"num_of_fans"`                     //粉丝数
+	ID             uint      `gorm:"primarykey"json:"id"`
+	CreatedAt      time.Time `form:"created_at"json:"created_at"`
+	AvatarAddr     string    `form:"avatar_addr"json:"avatar_addr"`   //社团头像url地址
+	Introduction   string    `form:"introduction"json:"introduction"` //社团简介
+	ClubName       string    `form:"club_name"json:"club_name"`       //社团名称
+	NumOfFans      int       `json:"num_of_fans"`                     //粉丝数
+	NumOfFavorites int       `json:"num_of_favorites"`                //活动被收藏的总次数
 }
 
 // @Summary 查看社团信息,可用于展示社团的页面
