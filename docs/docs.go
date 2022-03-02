@@ -426,6 +426,10 @@ var doc = `{
                 "num_of_fans": {
                     "description": "粉丝数",
                     "type": "integer"
+                },
+                "num_of_favorites": {
+                    "description": "活动被收藏的总次数",
+                    "type": "integer"
                 }
             }
         },
