@@ -52,7 +52,7 @@ func GetPosts(c *gin.Context) {
 
 }
 
-//绑定帖子的图片已经社团头像
+//绑定帖子的图片以及社团头像
 func BindPost(post *models.Post) (rspPost *ResponsePost) {
 	//把post的值放到rep中
 	bytes, _ := json.Marshal(post)
