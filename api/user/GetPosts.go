@@ -1,10 +1,9 @@
-package api
+package user
 
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"log"
 	"main/models"
 	"net/http"
 )
@@ -31,7 +30,6 @@ func GetPosts(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"msg": "参数绑定失败"})
 		return
 	}
-	log.Println(request)
 
 	validate := validator.New()
 	err := validate.Struct(request)

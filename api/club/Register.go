@@ -1,4 +1,4 @@
-package api
+package club
 
 import (
 	"github.com/gin-gonic/gin"
