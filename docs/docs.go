@@ -49,7 +49,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Response"
+                            "$ref": "#/definitions/club.Response"
                         }
                     }
                 }
@@ -106,7 +106,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.CreateResponse"
+                            "$ref": "#/definitions/club.CreateResponse"
                         }
                     }
                 }
@@ -145,7 +145,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.ResUrl"
+                            "$ref": "#/definitions/club.ResUrl"
                         }
                     }
                 }
@@ -179,7 +179,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.ResLogin"
+                            "$ref": "#/definitions/club.ResLogin"
                         }
                     }
                 }
@@ -237,7 +237,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.ResRegister"
+                            "$ref": "#/definitions/club.RspRegister"
                         }
                     }
                 }
@@ -262,7 +262,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.ResponseClubInfo"
+                            "$ref": "#/definitions/user.ResponseClubInfo"
                         }
                     }
                 }
@@ -287,7 +287,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.ResponsePost"
+                            "$ref": "#/definitions/user.ResponsePost"
                         }
                     }
                 }
@@ -330,7 +330,112 @@ var doc = `{
                     "200": {
                         "description": "data内有多条post",
                         "schema": {
-                            "$ref": "#/definitions/api.ResponsePosts"
+                            "$ref": "#/definitions/user.ResponsePosts"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/posts_from_clubs_user_fellow": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "获取用户关注的社团发布的最新的多条通知和动态",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "example": 1,
+                        "description": "页码,最小为1",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "maximum": 40,
+                        "minimum": 1,
+                        "type": "integer",
+                        "example": 10,
+                        "description": "每页数据量,最大为40",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "student_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "data内有多条post",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponsePosts"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/subscribe": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "关注社团",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "社团Id",
+                        "name": "club_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "学号",
+                        "name": "student_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseSubscribe"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "取消关注社团",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "社团Id",
+                        "name": "club_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "学号",
+                        "name": "student_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseSubscribe"
                         }
                     }
                 }
@@ -338,7 +443,7 @@ var doc = `{
         }
     },
     "definitions": {
-        "api.CreateResponse": {
+        "club.CreateResponse": {
             "type": "object",
             "properties": {
                 "msg": {
@@ -347,7 +452,7 @@ var doc = `{
                 }
             }
         },
-        "api.ResLogin": {
+        "club.ResLogin": {
             "type": "object",
             "properties": {
                 "msg": {
@@ -360,7 +465,29 @@ var doc = `{
                 }
             }
         },
-        "api.ResRegister": {
+        "club.ResUrl": {
+            "type": "object",
+            "properties": {
+                "callback_str": {
+                    "description": "回调的字符串",
+                    "type": "string"
+                },
+                "url": {
+                    "description": "签名url",
+                    "type": "string"
+                }
+            }
+        },
+        "club.Response": {
+            "type": "object",
+            "properties": {
+                "msg": {
+                    "description": "返回的信息",
+                    "type": "string"
+                }
+            }
+        },
+        "club.RspRegister": {
             "type": "object",
             "properties": {
                 "club_id": {
@@ -380,29 +507,7 @@ var doc = `{
                 }
             }
         },
-        "api.ResUrl": {
-            "type": "object",
-            "properties": {
-                "callback_str": {
-                    "description": "回调的字符串",
-                    "type": "string"
-                },
-                "url": {
-                    "description": "签名url",
-                    "type": "string"
-                }
-            }
-        },
-        "api.Response": {
-            "type": "object",
-            "properties": {
-                "msg": {
-                    "description": "返回的信息",
-                    "type": "string"
-                }
-            }
-        },
-        "api.ResponseClubInfo": {
+        "user.ResponseClubInfo": {
             "type": "object",
             "properties": {
                 "avatar_addr": {
@@ -433,7 +538,7 @@ var doc = `{
                 }
             }
         },
-        "api.ResponsePost": {
+        "user.ResponsePost": {
             "type": "object",
             "properties": {
                 "article": {
@@ -481,15 +586,24 @@ var doc = `{
                 }
             }
         },
-        "api.ResponsePosts": {
+        "user.ResponsePosts": {
             "type": "object",
             "properties": {
                 "data": {
                     "description": "data内包涵多条帖子数据",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/api.ResponsePost"
+                        "$ref": "#/definitions/user.ResponsePost"
                     }
+                }
+            }
+        },
+        "user.ResponseSubscribe": {
+            "type": "object",
+            "properties": {
+                "msg": {
+                    "description": "信息",
+                    "type": "string"
                 }
             }
         }
