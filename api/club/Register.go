@@ -13,16 +13,16 @@ import (
 )
 
 //用户注册信息
-type ClubRegister struct {
+type ReqRegister struct {
 	InvitationCode int64  `form:"invitation_code"json:"invitation_code"validate:"required"`            //邀请码
-	ClubId         int64  `form:"club_id"json:"club_id"validate:"required,min=99999,max=999999999999"` //社团登录账号7-12位
+	Account        int64  `form:"club_id"json:"club_id"validate:"required,min=99999,max=999999999999"` //社团登录账号7-12位
 	ClubName       string `form:"club_name"json:"club_name"validate:"required,min=2"`                  //社团名称
 	Password       string `form:"password"json:"password"validate:"required,min=6,max=32"`             //密码6-32位
 	Password2      string `form:"password2"json:"password2"validate:"required,eqfield=Password"`       //	确认密码
 
 }
 
-type ResRegister struct {
+type RspRegister struct {
 	Msg      string `json:"msg"`     //信息
 	ClubId   int64  `json:"club_id"` //社团Id
 	ClubName string `json:"club_name"`
@@ -31,12 +31,12 @@ type ResRegister struct {
 
 // @Summary 注册社团账号
 // @Produce json
-// @Param object formData ClubRegister true "注册所需要的参数"
-// @Success 200 {object} ResRegister
+// @Param object formData ReqRegister true "注册所需要的参数"
+// @Success 200 {object} RspRegister
 // @Router /register [post]
 func Register(c *gin.Context) {
 	//从请求中把数据取出
-	var requestUser ClubRegister
+	var requestUser ReqRegister
 	err := c.ShouldBind(&requestUser)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"msg": "注册参数绑定失败:" + err.Error()})
@@ -59,7 +59,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	if models.ExistClub("club_id", strconv.FormatInt(requestUser.ClubId, 10)) {
+	if models.ExistClub("account", strconv.FormatInt(requestUser.Account, 10)) {
 		c.JSON(http.StatusBadRequest, gin.H{"msg": "账号已存在"})
 		return
 	}
@@ -77,7 +77,7 @@ func Register(c *gin.Context) {
 
 	//创建用户实例,存入注册信息
 	var clubInfo = models.ClubInfo{
-		Account:  requestUser.ClubId,
+		Account:  requestUser.Account,
 		ClubName: requestUser.ClubName,
 		Password: string(hashPassword),
 	}
@@ -86,9 +86,9 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"msg": "注册信息存入数据库失败"})
 	}
 
-	c.JSON(http.StatusOK, ResRegister{
+	c.JSON(http.StatusOK, RspRegister{
 		"注册成功,请重新登陆",
-		requestUser.ClubId,
+		requestUser.Account,
 		requestUser.ClubName,
 		requestUser.Password,
 	})
