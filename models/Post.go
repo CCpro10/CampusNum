@@ -36,6 +36,17 @@ func GetPosts(isNotice bool, page int, size int) (Posts *[]Post, ok bool) {
 	return &posts, true
 }
 
+//获取用户关注的社团发布的最新的多条通知/动态
+func GetPostsFormClubsUserFellow(userId interface{}, page int, size int) (Posts *[]Post, ok bool) {
+	var posts []Post
+	offsetNum := (page - 1) * size
+	var clubIds []uint
+	DB.Model(Subscription{}).Select("club_id").Where("user_id=?", userId).Find(&clubIds)
+	DB.Where("club_id IN ?", clubIds).Limit(size).Offset(offsetNum).Order("id desc").Find(&posts)
+
+	return &posts, true
+}
+
 //发布活动或动态
 func (post *Post) CreatePost(clubId uint, pictureIds []uint) (err error) {
 	DB.Create(post)
