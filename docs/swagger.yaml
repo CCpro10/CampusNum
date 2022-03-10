@@ -204,7 +204,7 @@ paths:
             $ref: '#/definitions/club.ResUrl'
       summary: 获取上传图片或头像的签名
   /login:
-    get:
+    post:
       parameters:
       - description: 社团名或社团账号,至少2位
         in: formData

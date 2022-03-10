@@ -44,6 +44,7 @@ func Callback(c *gin.Context) {
 	picture.PictureAddr = GetUrlByName(picture.PictureName)
 	id, _ := picture.CreatePicture()
 
+	//给前端返回图片Id
 	c.JSON(http.StatusOK, gin.H{"200": "OK", "picture_id": id})
 	return
 

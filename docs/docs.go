@@ -152,7 +152,7 @@ var doc = `{
             }
         },
         "/login": {
-            "get": {
+            "post": {
                 "produces": [
                     "application/json"
                 ],

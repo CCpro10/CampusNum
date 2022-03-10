@@ -133,7 +133,7 @@
             }
         },
         "/login": {
-            "get": {
+            "post": {
                 "produces": [
                     "application/json"
                 ],

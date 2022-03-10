@@ -29,10 +29,7 @@ func ModifyClubIntroductionById(clubId interface{}, introduction string) bool {
 //通过ID,account,club_name判断社团是否存在,存在则返回true
 func ExistClub(field string, value interface{}) bool {
 	var c ClubInfo
-	e := DB.Where(field+" = ?", value).First(&c).Error
-	if e != nil {
-		log.Println(e)
-	}
+	DB.Where(field+" = ?", value).First(&c)
 
 	if c.ID != 0 {
 		return true
